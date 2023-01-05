@@ -15,7 +15,7 @@
 - 超级丰富的可自定义度！！！啥都能通过JSON自定义
 
 ## 图片
-![1672878550088](image/README/1672878550088.png)
+![1672888223621](image/README/1672888223621.png)
 ## 使用方法
 1. 下载/clone储存库
 2. 执行命令：*直接从release下载的话，不用执行*
@@ -26,24 +26,25 @@ pip install -r requirements.txt
 4. 运行main.py或main.exe！
 
 ## settings.json配置
-| 键               | 值                            | 默认值         |
-| ---------------- | ----------------------------- | -------------- |
-| clock            | `true`或`false`: 是否显示时钟 | `true`         |
-| update_frequency | 进度条更新频率（毫秒）        | 500            |
-| qss_window       | 窗口样式qss                   | 带绿色的进度条 |
-| qt_material      | `Qt_material`用到的.xml样式   | dark_teal.xml  |
-| processes        | 进度条（列表/array）          | 无             |
+| 键               | 值                          | 默认值         |
+| ---------------- | --------------------------- | -------------- |
+| clock            | 是否显示时钟                | `true`         |
+| update_frequency | 进度条更新频率（毫秒）      | 500            |
+| qss_window       | 窗口样式qss                 | 带绿色的进度条 |
+| qt_material      | `Qt_material`用到的.xml样式 | dark_teal.xml  |
+| processes        | 进度条（列表/array）        | 无             |
 
 `Qt_material`设置见[文档](https://qt-material.readthedocs.io/en/latest/index.html)或[github](https://github.com/UN-GCPDS/qt-material)
 
 ## `processes`进度条配置
 array的每一项是dict，其配置如下：
-| 键      | 值                           | 默认值 |
-| ------- | ---------------------------- | ------ |
-| text    | 唯一的标识                   | 无     |
-| start   | 这个事件开始时间             | 无     |
-| end     | 这个事件结束时间             | 无     |
-| ndigits | 精确的位数（好像没什么卵用） | 4      |
+| 键      | 值                           | 默认值     |
+| ------- | ---------------------------- | ---------- |
+| text    | 唯一的标识                   | 无         |
+| start   | 这个事件开始时间             | 无         |
+| end     | 这个事件结束时间             | 无         |
+| label   | 显示在屏幕上的字             | 与text相同 |
+| ndigits | 精确的位数（好像没什么卵用） | 4          |
 
 `start`、`end`必须是ISO格式的日期，如`01:05:24`或`01:05`，秒数可以没有，但是时分必须是两位，要自己补0
 
@@ -60,9 +61,15 @@ array的每一项是dict，其配置如下：
             "ndigits": 4
         },
         {
-            "name": "数学",
-            "start": "18:00:00",
-            "end": "18:45:00"
+            "name": "历史",
+            "start": "11:00:00",
+            "end": "11:45:00",
+            "label": "历史课"
+        },
+        {
+            "name": "课间",
+            "start": "10:45:00",
+            "end": "11:00:00"
         }
     ]
 }

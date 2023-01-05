@@ -1,6 +1,6 @@
 from ball import Ui_Form
 from PySide2.QtCore import Qt,QCoreApplication,QTime,QTimer,SIGNAL
-from PySide2.QtWidgets import QWidget,QApplication,QMessageBox,QLCDNumber,QProgressBar
+from PySide2.QtWidgets import QWidget,QApplication,QMessageBox,QLCDNumber,QProgressBar,QLabel
 from PySide2.QtGui import QMouseEvent
 import json
 import time,datetime
@@ -97,7 +97,6 @@ class System():
         border-radius: 10;
         border: 2px solid grey;
         color: #FFFFFF;
-        background:qlineargradient(spread:pad,x1:0,y1:0,x2:1,y2:0,stop:0 red,stop:1 blue);
         }
         ''')
         window.setStyleSheet(self.settings.get('qss_window',''))
@@ -116,24 +115,30 @@ class System():
         window.ui.lcdNumber.display(now)
     def create_process_bar(self,name:str=''):
         """根据`self.settings`创建进度条"""
-        self.bars:List[QProgressBar]=[]
         if name:#加指定的
             percent=self.get_percent(name)#获取当前值
-            self.bars.append(QProgressBar(window.ui.processLayout))#创建进度条
+            self.bars.append(QProgressBar())#创建进度条
             self.bars[-1].setObjectName(name)#将来可以获取
             self.bars[-1].setValue(percent*100)
-            window.ui.processLayout.addWidget(self.bars[-1])
         else:#初始化时使用的，全都加上
+            self.bars:List[QProgressBar]=[]
+            self.labels:List[QLabel]=[]
             for item in self.settings['processes']:
                 #item是每一项，根据每一项创建工作
                 percent=self.get_percent(item['name'])#获取当前值
+                #标签
+                self.labels.append(QLabel(item.get('label',item['name'])))
+                self.labels[-1].setObjectName(item['name'])
+                #进度条
                 self.bars.append(QProgressBar(window))#创建进度条
                 self.bars[-1].setObjectName(item['name'])#将来可以获取
+                #把这两个东西加载到窗口里
                 if percent == float('inf') or percent == float('-inf'):
+                    self.labels[-1].setHidden(True)
                     self.bars[-1].setHidden(True)
                 else:
                     self.bars[-1].setValue(percent*100)
-                window.ui.processLayout.addWidget(self.bars[-1])
+                window.ui.formLayout.addRow(self.labels[-1],self.bars[-1])
     def start_bar(self):
         """启动更新进度条"""
         self.bar_timer = QTimer()
@@ -145,11 +150,17 @@ class System():
         for bar in self.bars:
             name=bar.objectName()
             percent=self.get_percent(name)#获取当前值
+            label=tuple(filter(lambda x:x.objectName() == name,
+                                    self.labels)
+                )[0]
             if percent == float('-inf') or percent == float('inf'):#隐藏这个条
+
                 bar.setHidden(True)
+                label.setHidden(True)
             else:
                 bar.setHidden(False)
                 bar.setValue(percent*100)
+                label.setHidden(False)
     def get_percent(self,name:str)->float:
         """找到现在的时间应该是百分之几。
         name:str，在`self.settings`里的名字"""
