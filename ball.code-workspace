@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"cSpell.words": [
+			"Frameless",
+			"ndigits",
+			"QLCD"
+		],
+		"todo-tree.tree.scanMode": "workspace",
+		"todo-tree.tree.disableCompactFolders": true,
+		"todo-tree.tree.showCountsInTree": true
+	}
+}
